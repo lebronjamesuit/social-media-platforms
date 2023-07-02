@@ -20,4 +20,12 @@ public class Comment {
     private String text;
     private Instant createdDate;
 
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "postId")
+    private Post post;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name= "userId")
+    private User user;
+
 }

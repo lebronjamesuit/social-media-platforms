@@ -1,0 +1,8 @@
+
+# Mysql
+Way 1: docker run --name container-mysql -e MYSQL_ROOT_PASSWORD=mysqlpassword -d mysql:8-oracle
+Way 2: docker run --detach --env MYSQL_ROOT_PASSWORD=root --env MYSQL_USER=user --env MYSQL_PASSWORD=password --env MYSQL_DATABASE=social-media-db --name container-mysql-8 --publish 3306:3306 mysql:8-oracle
+Mistake: Way 1 were missing  the part where it exports host port and container port.
+Proper way: way 2
+
+

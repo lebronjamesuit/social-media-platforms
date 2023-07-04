@@ -1,5 +1,6 @@
 package com.social.media.confessionmedia.service;
 
+import com.social.media.confessionmedia.dto.NotificationEmail;
 import com.social.media.confessionmedia.dto.RegisterForm;
 import com.social.media.confessionmedia.model.User;
 import com.social.media.confessionmedia.model.VerificationToken;
@@ -23,22 +24,37 @@ public class AuthService {
     private UserRepo userRepo;
     private PasswordEncoder passwordEncoder;
     private VerificationTokenRepo verificationTokenRepo;
+    private MailService mailService;
 
     @Transactional
     public void signUp(RegisterForm registerForm){
         User user = new User();
         user.setEmail(registerForm.getEmail());
         user.setUserName(registerForm.getUserName());
-        user.setEnabled(false);
+        user.setEnabled(false);  // UnActivated account
         user.setCreated(Instant.now());
 
         user.setPassword(passwordEncoder.encode(registerForm.getPassword()));
         userRepo.save(user);
 
-        generateVerification(user);
+        String tokenValue = generateVerification(user);
+
+        NotificationEmail notiEmail = new NotificationEmail();
+        notiEmail.setRecipient(user.getEmail());
+        notiEmail.setSubject("Confirmation registration");
+
+        StringBuilder stringBuilder  = new StringBuilder();
+        stringBuilder.append("Welcome to our social media:  " +  user.getUserName());
+        stringBuilder.append("One more step is click the link bellow to activate your account : ");
+        stringBuilder.append("http://localhost:8600/api/auth/accountVerification/" + tokenValue);
+
+        notiEmail.setBody(stringBuilder.toString());
+
+        mailService.sendEmail(notiEmail);
+
     }
 
-    private void generateVerification(User user) {
+    private String generateVerification(User user) {
         String tokenValue =  UUID.randomUUID().toString();
 
         VerificationToken vt = new VerificationToken();
@@ -46,6 +62,8 @@ public class AuthService {
         vt.setUser(user);
         vt.setCreated(Instant.now());
         verificationTokenRepo.save(vt);
+
+        return tokenValue;
     }
 
 

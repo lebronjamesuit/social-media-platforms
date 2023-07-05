@@ -67,4 +67,11 @@ public class AuthService {
     }
 
 
+    public void verificationToken(String tokenValue) {
+       VerificationToken  vt =  verificationTokenRepo.findByTokenValue(tokenValue);
+       User user =  vt.getUser();
+       user.setEnabled(true);
+       userRepo.save(user);
+
+    }
 }

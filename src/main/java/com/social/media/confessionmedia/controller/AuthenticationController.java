@@ -31,4 +31,11 @@ public class AuthenticationController {
        return "hello Auth";
     }
 
+    @GetMapping("/accountVerification/{tokenValue}")
+    public ResponseEntity<String> accountVerification(@PathVariable("tokenValue") String tokenValue){
+        authService.verificationToken(tokenValue);
+        return new ResponseEntity<>("Verify OK", HttpStatus.OK);
+    }
+
+
 }

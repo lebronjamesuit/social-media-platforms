@@ -5,7 +5,6 @@ import com.social.media.confessionmedia.dto.NotificationEmail;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -31,7 +30,7 @@ public class MailService {
             log.info("send email ok");
         }catch (MailException e){
             log.error(e.getMessage());
-            throw new SocialMailException("Exception occurred when sending mail to " + notificationEmail.getRecipient(), e);
+            throw new SocialGeneralException("Exception occurred when sending mail to " + notificationEmail.getRecipient(), e);
         }
 
     }

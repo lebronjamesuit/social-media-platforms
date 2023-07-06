@@ -1,6 +1,8 @@
 package com.social.media.confessionmedia.controller;
 
+import com.social.media.confessionmedia.dto.AuthenticationResponse;
 import com.social.media.confessionmedia.dto.RegisterForm;
+import com.social.media.confessionmedia.dto.RequestLogin;
 import com.social.media.confessionmedia.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,12 +21,17 @@ public class AuthenticationController {
         this.authService = authenticationService;
     }*/
 
+    @PostMapping("/login")
+    public AuthenticationResponse signUp(@RequestBody RequestLogin requestLogin) throws Exception {
+        AuthenticationResponse authResponse  = authService.login(requestLogin);
+        return authResponse;
+    }
+
     @PostMapping("/signup")
     public ResponseEntity<String> signUp(@RequestBody RegisterForm registerForm){
         authService.signUp(registerForm);
         return new ResponseEntity<>("User Register OK", HttpStatus.OK);
     }
-
 
     @GetMapping("/helloAuth")
     public String getString(){
@@ -33,8 +40,8 @@ public class AuthenticationController {
 
     @GetMapping("/accountVerification/{tokenValue}")
     public ResponseEntity<String> accountVerification(@PathVariable("tokenValue") String tokenValue){
-        authService.verificationToken(tokenValue);
-        return new ResponseEntity<>("Verify OK", HttpStatus.OK);
+        authService.verificationRegisteredAccountByToken(tokenValue);
+        return new ResponseEntity<>("Account activated successfully", HttpStatus.OK);
     }
 
 

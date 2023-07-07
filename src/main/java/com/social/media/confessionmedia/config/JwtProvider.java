@@ -2,11 +2,8 @@ package com.social.media.confessionmedia.config;
 
 
 import com.social.media.confessionmedia.model.User;
-import com.social.media.confessionmedia.service.SocialGeneralException;
-import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,10 +38,12 @@ public class JwtProvider {
 
     private String generateTokenWithUserName(String username) {
 
-        JwtClaimsSet claimSet  = JwtClaimsSet.builder().subject(username)
-                .issuer(username)
+        JwtClaimsSet claimSet  = JwtClaimsSet.builder()
+                .issuer("self")
+                .subject(username)
                 .issuedAt(Instant.now())
                 .expiresAt(Instant.now().plus(jwtExpirationInMinutes, ChronoUnit.MINUTES))
+                .claim("scope", "ROLE_USER")
                 .build();
 
         Jwt jwt =  this.jwtEncoder.encode(JwtEncoderParameters.from(claimSet));

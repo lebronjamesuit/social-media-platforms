@@ -2,6 +2,7 @@ package com.social.media.confessionmedia.service;
 
 import com.social.media.confessionmedia.builder.MailContentBuilder;
 import com.social.media.confessionmedia.dto.NotificationEmail;
+import com.social.media.confessionmedia.exceptions.SocialGeneralException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

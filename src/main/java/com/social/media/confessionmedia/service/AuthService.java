@@ -5,18 +5,17 @@ import com.social.media.confessionmedia.dto.AuthenticationResponse;
 import com.social.media.confessionmedia.dto.NotificationEmail;
 import com.social.media.confessionmedia.dto.RegisterForm;
 import com.social.media.confessionmedia.dto.RequestLogin;
+import com.social.media.confessionmedia.exceptions.SocialGeneralException;
 import com.social.media.confessionmedia.model.User;
 import com.social.media.confessionmedia.model.VerificationToken;
 import com.social.media.confessionmedia.repository.UserRepo;
 import com.social.media.confessionmedia.repository.VerificationTokenRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,20 +94,14 @@ public class AuthService {
        userRepo.save(u);
     }
 
-    public AuthenticationResponse login(RequestLogin requestLogin) throws Exception {
+    public AuthenticationResponse login(RequestLogin requestLogin) throws Exception, AuthenticationException {
         // Create authentication core for user
         String tokenGenerated = "";
-        try{
-            UsernamePasswordAuthenticationToken userPwdAuthToken =
-                    new UsernamePasswordAuthenticationToken(requestLogin.getUserName(), requestLogin.getPassword());
-            Authentication authenticationCore = authenticationManager.authenticate(userPwdAuthToken);
-            // Generate token
-            tokenGenerated = jwtProvider.generateToken(authenticationCore);
-        }
-
-        catch(Exception e){
-            throw new Exception(e.getMessage());
-        }
+        UsernamePasswordAuthenticationToken userPwdAuthToken =
+                new UsernamePasswordAuthenticationToken(requestLogin.getUserName(), requestLogin.getPassword());
+        Authentication authenticationCore = authenticationManager.authenticate(userPwdAuthToken);
+        // Generate token
+        tokenGenerated = jwtProvider.generateToken(authenticationCore);
 
 
         return  AuthenticationResponse.builder()

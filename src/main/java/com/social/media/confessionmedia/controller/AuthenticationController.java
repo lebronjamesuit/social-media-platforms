@@ -22,9 +22,9 @@ public class AuthenticationController {
     }*/
 
     @PostMapping("/login")
-    public AuthenticationResponse signUp(@RequestBody RequestLogin requestLogin) throws Exception {
+    public ResponseEntity<AuthenticationResponse> signUp(@RequestBody RequestLogin requestLogin) throws Exception {
         AuthenticationResponse authResponse  = authService.login(requestLogin);
-        return authResponse;
+        return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
 
     @PostMapping("/signup")

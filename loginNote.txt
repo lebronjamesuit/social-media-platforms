@@ -1,0 +1,15 @@
+Login process
+
+KeyStore
+
+keytool -genkey -alias social-media-key -keyalg RSA -keystore social-media.jks -keysize 2048
+
+
+
+
+1. So it starts with the Client sending a login request to the server.
+2. The server checks the credentials provided by the user, if the credentials are right, it creates a JSON Web Token (JWT).
+3. It responds with a success message (HTTP Status 200) and the JWT.
+4. The client uses this JWT in all the subsequent requests to the user, it provides this JWT as an Authorization header with Bearer authentication scheme.
+5. When the server, receives a request against a secured endpoint, it checks the JWT and validates whether the token is generated and signed by the server or not.
+6. If the validation is successful, the server responds accordingly to the client.

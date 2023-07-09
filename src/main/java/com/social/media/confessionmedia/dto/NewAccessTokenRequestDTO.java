@@ -1,5 +1,6 @@
 package com.social.media.confessionmedia.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,10 +8,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterForm {
+public class NewAccessTokenRequestDTO {
 
-    private String email;
+    @NotBlank
+    private String refreshToken;
     private String userName;
-    private String password;
-
 }
+

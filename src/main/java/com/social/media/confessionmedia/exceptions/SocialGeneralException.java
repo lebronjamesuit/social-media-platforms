@@ -9,11 +9,8 @@ public class SocialGeneralException extends RuntimeException {
         super(s, e);
     }
 
-    public SocialGeneralException(String s, AuthenticationException e) {
-        super(s, e);
-    }
-
     public SocialGeneralException(String s) {
         super(s);
     }
+
 }

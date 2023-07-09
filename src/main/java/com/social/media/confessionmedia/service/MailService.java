@@ -1,7 +1,7 @@
 package com.social.media.confessionmedia.service;
 
 import com.social.media.confessionmedia.builder.MailContentBuilder;
-import com.social.media.confessionmedia.dto.NotificationEmail;
+import com.social.media.confessionmedia.dto.NotificationEmailDTO;
 import com.social.media.confessionmedia.exceptions.SocialGeneralException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
@@ -23,28 +23,28 @@ public class MailService {
     private final JavaMailSender javaMailSender;
 
     @Async
-    public void sendEmail(NotificationEmail notificationEmail) {
+    public void sendEmail(NotificationEmailDTO notificationEmailDTO) {
 
-        MimeMessagePreparator mimeMessagePreparator = buildMimeMessagePreparator(notificationEmail);
+        MimeMessagePreparator mimeMessagePreparator = buildMimeMessagePreparator(notificationEmailDTO);
         try {
             javaMailSender.send(mimeMessagePreparator);
             log.info("send email ok");
         }catch (MailException e){
             log.error(e.getMessage());
-            throw new SocialGeneralException("Exception occurred when sending mail to " + notificationEmail.getRecipient(), e);
+            throw new SocialGeneralException("Exception occurred when sending mail to " + notificationEmailDTO.getRecipient(), e);
         }
 
     }
 
-    private MimeMessagePreparator buildMimeMessagePreparator(NotificationEmail notificationEmail) {
+    private MimeMessagePreparator buildMimeMessagePreparator(NotificationEmailDTO notificationEmailDTO) {
         MimeMessagePreparator mimeMessagePreparator = new MimeMessagePreparator() {
             @Override
             public void prepare(MimeMessage mimeMessage) throws Exception {
                 MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
                 helper.setFrom("social-media@confession.com");
-                helper.setTo(notificationEmail.getRecipient());
-                helper.setSubject(notificationEmail.getSubject());
-                helper.setText(mailContentBuilder.build(notificationEmail.getBody()));
+                helper.setTo(notificationEmailDTO.getRecipient());
+                helper.setSubject(notificationEmailDTO.getSubject());
+                helper.setText(mailContentBuilder.build(notificationEmailDTO.getBody()));
             }
         };
         return mimeMessagePreparator;

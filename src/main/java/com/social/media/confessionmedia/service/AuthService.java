@@ -1,10 +1,7 @@
 package com.social.media.confessionmedia.service;
 
 import com.social.media.confessionmedia.config.JwtProvider;
-import com.social.media.confessionmedia.dto.AuthenticationResponse;
-import com.social.media.confessionmedia.dto.NotificationEmail;
-import com.social.media.confessionmedia.dto.RegisterForm;
-import com.social.media.confessionmedia.dto.RequestLogin;
+import com.social.media.confessionmedia.dto.*;
 import com.social.media.confessionmedia.exceptions.SocialGeneralException;
 import com.social.media.confessionmedia.model.User;
 import com.social.media.confessionmedia.model.VerificationToken;
@@ -39,37 +36,38 @@ public class AuthService {
     private AuthenticationManager authenticationManager;
 
     private JwtProvider jwtProvider;
+    private AccessTokenService accessTokenService;
+    private RefreshTokenService refreshTokenService;
 
     @Transactional
-    public void signUp(RegisterForm registerForm){
+    public void signUp(RegisterFormDTO registerFormDTO) {
         User user = new User();
-        user.setEmail(registerForm.getEmail());
-        user.setUserName(registerForm.getUserName());
+        user.setEmail(registerFormDTO.getEmail());
+        user.setUserName(registerFormDTO.getUserName());
         user.setEnabled(false);  // UnActivated account
         user.setCreated(Instant.now());
 
-        user.setPassword(passwordEncoder.encode(registerForm.getPassword()));
+        user.setPassword(passwordEncoder.encode(registerFormDTO.getPassWord()));
         userRepo.save(user);
 
         String tokenValue = generateVerification(user);
 
-        NotificationEmail notiEmail = new NotificationEmail();
-        notiEmail.setRecipient(user.getEmail());
-        notiEmail.setSubject("Confirmation registration");
+        NotificationEmailDTO notifiedEmail = new NotificationEmailDTO();
+        notifiedEmail.setRecipient(user.getEmail());
+        notifiedEmail.setSubject("Confirmation registration");
 
-        StringBuilder stringBuilder  = new StringBuilder();
-        stringBuilder.append("Welcome to our social media:  " +  user.getUserName());
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Welcome to our social media:  " + user.getUserName());
         stringBuilder.append("One more step is click the link bellow to activate your account : ");
         stringBuilder.append("http://localhost:8600/api/auth/accountVerification/" + tokenValue);
 
-        notiEmail.setBody(stringBuilder.toString());
-
-        mailService.sendEmail(notiEmail);
+        notifiedEmail.setBody(stringBuilder.toString());
+        mailService.sendEmail(notifiedEmail);
 
     }
 
     private String generateVerification(User user) {
-        String tokenValue =  UUID.randomUUID().toString();
+        String tokenValue = UUID.randomUUID().toString();
 
         VerificationToken vt = new VerificationToken();
         vt.setTokenValue(tokenValue);
@@ -82,32 +80,63 @@ public class AuthService {
 
 
     public void verificationRegisteredAccountByToken(String tokenValue) {
-       Optional<VerificationToken> optionalVerificationToken =  verificationTokenRepo.findByTokenValue(tokenValue);
-       optionalVerificationToken.orElseThrow(() -> new SocialGeneralException("Invalid token"));
-       fetchUserAndEnable(optionalVerificationToken.get());
+        Optional<VerificationToken> optionalVerificationToken = verificationTokenRepo.findByTokenValue(tokenValue);
+        optionalVerificationToken.orElseThrow(() -> new SocialGeneralException("Invalid token"));
+        fetchUserAndEnable(optionalVerificationToken.get());
     }
 
     private void fetchUserAndEnable(VerificationToken token) {
         // Token entity has User_id, lazy load
-       User u = token.getUser();
-       u.setEnabled(true);
-       userRepo.save(u);
+        User u = token.getUser();
+        u.setEnabled(true);
+        userRepo.save(u);
     }
 
-    public AuthenticationResponse login(RequestLogin requestLogin) throws Exception, AuthenticationException {
-        // Create authentication core for user
-        String tokenGenerated = "";
+    @Transactional
+    public AuthenticationResponseDTO login(RequestLoginDTO requestLoginDTO) throws Exception, AuthenticationException {
+
         UsernamePasswordAuthenticationToken userPwdAuthToken =
-                new UsernamePasswordAuthenticationToken(requestLogin.getUserName(), requestLogin.getPassword());
+                new UsernamePasswordAuthenticationToken(requestLoginDTO.getUserName(), requestLoginDTO.getPassWord());
+
         Authentication authenticationCore = authenticationManager.authenticate(userPwdAuthToken);
-        // Generate token
-        tokenGenerated = jwtProvider.generateToken(authenticationCore);
 
+        User userModel = (User) authenticationCore.getPrincipal();
+        String accessToken = accessTokenService.generateNewAccessTokenByUserName(userModel.getUserName());
+        String refreshedToken = refreshTokenService.generateAndSaveRefreshToken(userModel.getUserName());
 
-        return  AuthenticationResponse.builder()
-                .authenticationToken(tokenGenerated)
-                .username(requestLogin.getUserName())
-                .expiresAt(Instant.now().plus(jwtProvider.getJwtExpirationInMinutes(), ChronoUnit.MINUTES))
+        return AuthenticationResponseDTO.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshedToken)
+                .userName(requestLoginDTO.getUserName())
+                .accessTokenExpiresAt(Instant.now().plus(jwtProvider.getJwtExpirationInMinutes(), ChronoUnit.MINUTES))
+                .refreshTokenExpiresAt(Instant.now().plus(jwtProvider.getRefreshExpiration(), ChronoUnit.MINUTES))
                 .build();
+    }
+
+    /// If access token is expired, call this method to request a new one
+    public AuthenticationResponseDTO requestNewAccessToken(NewAccessTokenRequestDTO newAccessTokenRequestDTO) {
+        String accessToken = accessTokenService.generateNewAccessTokenByRefreshToken(newAccessTokenRequestDTO);
+        return AuthenticationResponseDTO.builder()
+                .accessToken(accessToken)
+                .refreshToken(newAccessTokenRequestDTO.getRefreshToken())
+                .userName(newAccessTokenRequestDTO.getUserName())
+                .accessTokenExpiresAt(Instant.now().plus(jwtProvider.getJwtExpirationInMinutes(), ChronoUnit.MINUTES))
+                .build();
+
+    }
+
+    public AuthenticationResponseDTO logout(NewAccessTokenRequestDTO tokenRequestDTO) {
+        if(tokenRequestDTO.getRefreshToken().isEmpty() == false){
+            Optional<User> userOp  = userRepo.findByUserName(tokenRequestDTO.getUserName());
+            refreshTokenService.revokeAllUserRefreshedTokens(userOp.get());
+        }
+
+        return AuthenticationResponseDTO.builder()
+                .accessToken(null)
+                .refreshToken(null)
+                .userName(tokenRequestDTO.getUserName())
+                .accessTokenExpiresAt(null)
+                .build();
+
     }
 }

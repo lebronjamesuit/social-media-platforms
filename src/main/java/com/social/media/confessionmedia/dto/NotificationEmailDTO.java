@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class NotificationEmail {
+public class NotificationEmailDTO {
 
     private String recipient;
     private String subject;

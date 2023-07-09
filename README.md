@@ -12,6 +12,9 @@
 
 <img width="1138" alt="Screenshot 2023-07-09 at 20 42 26" src="https://github.com/lebronjamesuit/social-media-platforms/assets/11584601/633db9db-6940-4e60-8450-f56745fe4e6c">
 
+![refresh tokn](https://github.com/lebronjamesuit/social-media-platforms/assets/11584601/2f9cb3cf-6c25-41a6-8fbe-c5fb053d3f5a)
+
+
 Features
 - User registration and login with JWT authentication
 - Password encryption using BCrypt

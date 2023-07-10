@@ -1,6 +1,5 @@
 
 # Mysql
-
 docker run --detach --env MYSQL_ROOT_PASSWORD=root --env MYSQL_USER=user --env MYSQL_PASSWORD=password --env MYSQL_DATABASE=social-media-db --name container-mysql-8 --publish 3306:3306 mysql:8-oracle
 
 

@@ -36,4 +36,10 @@ public class Post {
     @JoinColumn(name = "userId")
     private User user;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "subredditId")
+    private Subreddit subreddit;
+
 }
+
+

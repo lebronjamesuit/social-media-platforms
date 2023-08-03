@@ -52,6 +52,7 @@ public class Oauth2Config {
     public UserDetailsService userDetailsService() {
         return username -> (UserDetails) userRepo.findByUserName (username)
                 .orElseThrow(() -> new SocialGeneralException("User not found"));
+
     }
 
     @Bean

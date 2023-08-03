@@ -11,9 +11,10 @@ import java.util.Optional;
 @Repository
 public interface TokenRepo extends JpaRepository<Token,Long> {
 
+
     Optional<Token> findByToken(String token);
 
-    @Query(value = " SELECT * FROM token T WHERE T.USER_ID = ?1 "
+    @Query(value = " SELECT * FROM  {h-schema}token_user  T WHERE T.USER_ID = ?1 "
             , nativeQuery = true)
     List<Token> findAllValidTokenByUser(Long userId);
 

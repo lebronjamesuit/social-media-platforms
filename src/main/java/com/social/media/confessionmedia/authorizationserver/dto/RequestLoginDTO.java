@@ -9,7 +9,7 @@ import lombok.Data;
 @Builder
 public class RequestLoginDTO {
 
-    private String userName;
-    private String passWord;
+    private String username;
+    private String password;
 
 }

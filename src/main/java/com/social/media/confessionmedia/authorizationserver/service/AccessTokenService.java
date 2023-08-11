@@ -26,7 +26,7 @@ public class AccessTokenService {
     }
 
     public String generateNewAccessTokenByRefreshToken(NewAccessTokenRequestDTO newAccessTokenRequestDTO){
-        Optional<User> userOptional =  userRepo.findByUserName(newAccessTokenRequestDTO.getUserName());
+        Optional<User> userOptional =  userRepo.findByUserName(newAccessTokenRequestDTO.getUsername());
         User user = userOptional.get();
 
         // Verify refreshed token is still valid before generate new access token

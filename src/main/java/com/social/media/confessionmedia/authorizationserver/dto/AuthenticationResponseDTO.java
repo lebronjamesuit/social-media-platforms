@@ -16,6 +16,6 @@ public class AuthenticationResponseDTO {
     private String refreshToken;
     private Instant accessTokenExpiresAt;
     private Instant refreshTokenExpiresAt;
-    private String userName;
+    private String username;
 
 }

@@ -46,11 +46,11 @@ public class AuthService {
     public void signUp(RegisterFormDTO registerFormDTO) {
         User user = new User();
         user.setEmail(registerFormDTO.getEmail());
-        user.setUserName(registerFormDTO.getUserName());
+        user.setUserName(registerFormDTO.getUsername());
         user.setEnabled(false);  // UnActivated account
         user.setCreated(Instant.now());
 
-        user.setPassword(passwordEncoder.encode(registerFormDTO.getPassWord()));
+        user.setPassword(passwordEncoder.encode(registerFormDTO.getPassword()));
         userRepo.save(user);
 
         String tokenValue = generateVerification(user);
@@ -99,7 +99,7 @@ public class AuthService {
     public AuthenticationResponseDTO login(RequestLoginDTO requestLoginDTO) throws Exception, AuthenticationException {
 
         UsernamePasswordAuthenticationToken userPwdAuthToken =
-                new UsernamePasswordAuthenticationToken(requestLoginDTO.getUserName(), requestLoginDTO.getPassWord());
+                new UsernamePasswordAuthenticationToken(requestLoginDTO.getUsername(), requestLoginDTO.getPassword());
 
         Authentication authenticationCore = authenticationManager.authenticate(userPwdAuthToken);
 
@@ -110,7 +110,7 @@ public class AuthService {
         return AuthenticationResponseDTO.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshedToken)
-                .userName(requestLoginDTO.getUserName())
+                .username(requestLoginDTO.getUsername())
                 .accessTokenExpiresAt(Instant.now().plus(jwtProvider.getJwtExpirationInMinutes(), ChronoUnit.MINUTES))
                 .refreshTokenExpiresAt(Instant.now().plus(jwtProvider.getRefreshExpiration(), ChronoUnit.MINUTES))
                 .build();
@@ -122,7 +122,7 @@ public class AuthService {
         return AuthenticationResponseDTO.builder()
                 .accessToken(accessToken)
                 .refreshToken(newAccessTokenRequestDTO.getRefreshToken())
-                .userName(newAccessTokenRequestDTO.getUserName())
+                .username(newAccessTokenRequestDTO.getUsername())
                 .accessTokenExpiresAt(Instant.now().plus(jwtProvider.getJwtExpirationInMinutes(), ChronoUnit.MINUTES))
                 .build();
 
@@ -130,14 +130,14 @@ public class AuthService {
 
     public AuthenticationResponseDTO logout(NewAccessTokenRequestDTO tokenRequestDTO) {
         if(tokenRequestDTO.getRefreshToken().isEmpty() == false){
-            Optional<User> userOp  = userRepo.findByUserName(tokenRequestDTO.getUserName());
+            Optional<User> userOp  = userRepo.findByUserName(tokenRequestDTO.getUsername());
             refreshTokenService.revokeAllUserRefreshedTokens(userOp.get());
         }
 
         return AuthenticationResponseDTO.builder()
                 .accessToken(null)
                 .refreshToken(null)
-                .userName(tokenRequestDTO.getUserName())
+                .username(tokenRequestDTO.getUsername())
                 .accessTokenExpiresAt(null)
                 .build();
 

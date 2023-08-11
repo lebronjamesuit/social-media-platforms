@@ -12,6 +12,6 @@ public class NewAccessTokenRequestDTO {
 
     @NotBlank
     private String refreshToken;
-    private String userName;
+    private String username;
 }
 

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class RegisterFormDTO {
 
     private String email;
-    private String userName;
-    private String passWord;
+    private String username;
+    private String password;
 
 }

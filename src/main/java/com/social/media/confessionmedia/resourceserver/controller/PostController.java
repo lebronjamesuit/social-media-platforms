@@ -31,7 +31,6 @@ public class PostController {
         return status(HttpStatus.OK).body(postService.getPost(id));
     }
 
-/*
     @GetMapping
     public ResponseEntity<List<PostResponse>> getAllPosts() {
         return status(HttpStatus.OK).body(postService.getAllPosts());
@@ -46,5 +45,5 @@ public class PostController {
     @GetMapping(params = "username")
     public ResponseEntity<List<PostResponse>> getPostsByUsername(@RequestParam String username) {
         return status(HttpStatus.OK).body(postService.getPostsByUsername(username));
-    }*/
+    }
 }

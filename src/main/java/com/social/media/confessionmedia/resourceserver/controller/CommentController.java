@@ -4,6 +4,7 @@ package com.social.media.confessionmedia.resourceserver.controller;
 import com.social.media.confessionmedia.resourceserver.dto.CommentsDto;
 import com.social.media.confessionmedia.resourceserver.service.CommentService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/api/v1/comments")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CommentController {
     private final CommentService commentService;
 

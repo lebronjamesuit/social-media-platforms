@@ -20,14 +20,16 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-/*import com.social.media.confessionmedia.authorizationserver.model.User;
+
+import java.util.List;
+import com.social.media.confessionmedia.authorizationserver.model.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 import com.social.media.confessionmedia.resourceserver.model.Post;
 import com.social.media.confessionmedia.resourceserver.dto.PostResponse;
-import com.social.media.confessionmedia.resourceserver.exceptions.PostNotFoundException;*/
+import com.social.media.confessionmedia.resourceserver.exceptions.PostNotFoundException;
 
 @Service
 @AllArgsConstructor
@@ -54,7 +56,6 @@ public class PostService {
         return postMapper.mapToDto(post);
     }
 
-/*
     @Transactional(readOnly = true)
     public List<PostResponse> getAllPosts() {
         return postRepository.findAll()
@@ -80,7 +81,7 @@ public class PostService {
                 .stream()
                 .map(postMapper::mapToDto)
                 .collect(toList());
-    }*/
+    }
 
 
 }

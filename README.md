@@ -20,16 +20,23 @@ Features
 - Password encryption using BCrypt
 - Role-based authorization with Spring Security
 - Customized access denied handling
-- Logout mechanism
-- Refresh token
+- Logout mechanism revoke tokens 
+- Refresh token.
 Technologies
 - Spring Boot 3.0
 - Spring Security 6.0
 - JSON Web Tokens (JWT) - nimbusds jwt
 - BCrypt
 
-Docker image: mysql
+Docker image: mysql (or postgress)
 # Mysql
 docker run --detach --env MYSQL_ROOT_PASSWORD=root --env MYSQL_USER=user --env MYSQL_PASSWORD=password --env MYSQL_DATABASE=social-media-db --name container-mysql-8 --publish 3306:3306 mysql:8-oracle
+
+
+AWS deployment:
+http://jamesvo.eu-west-2.elasticbeanstalk.com/swagger-ui/index.html#/
+
+
+
 
 

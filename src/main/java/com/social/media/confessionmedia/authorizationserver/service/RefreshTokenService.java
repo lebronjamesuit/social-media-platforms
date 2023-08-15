@@ -20,14 +20,6 @@ public class RefreshTokenService {
     private final JwtProvider jwtProvider;
     private final UserRepo userRepo;
 
-    /*public boolean checkRefreshTokenRevokedOrExpired(String jwtValue){
-       Optional<Token> token  =  tokenRepo.findByToken(jwtValue);
-       if(token.isPresent()){
-        return  token.map(t -> !t.isExpired() && !t.isRevoked())
-                 .orElse(false);
-       }
-       return true;
-    }*/
 
     public String generateAndSaveRefreshToken(String username) {
         Optional<User> userOp = userRepo.findByUserName(username);

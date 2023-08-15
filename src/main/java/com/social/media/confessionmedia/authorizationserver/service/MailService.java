@@ -13,6 +13,8 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+
+// DO NOT NEED THIS CLASS IN PRODUCTION
 @Slf4j
 @AllArgsConstructor
 @Service

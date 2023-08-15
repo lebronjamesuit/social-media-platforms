@@ -32,7 +32,7 @@ public class AuthService {
     private UserRepo userRepo;
     private PasswordEncoder passwordEncoder;
     private VerificationTokenRepo verificationTokenRepo;
-    private MailService mailService;
+    private GmailService gmailService;
 
     // AuthenticationManager is autowired from SecurityConfig init.
     @Autowired
@@ -41,6 +41,7 @@ public class AuthService {
     private JwtProvider jwtProvider;
     private AccessTokenService accessTokenService;
     private RefreshTokenService refreshTokenService;
+
 
     @Transactional
     public void signUp(RegisterFormDTO registerFormDTO) {
@@ -54,20 +55,10 @@ public class AuthService {
         userRepo.save(user);
 
         String tokenValue = generateVerification(user);
-
-        NotificationEmailDTO notifiedEmail = new NotificationEmailDTO();
-        notifiedEmail.setRecipient(user.getEmail());
-        notifiedEmail.setSubject("Confirmation registration");
-
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Welcome to our social media:  " + user.getUserName());
-        stringBuilder.append("One more step is click the link bellow to activate your account : ");
-        stringBuilder.append("http://localhost:8600/api/auth/accountVerification/" + tokenValue);
-
-        notifiedEmail.setBody(stringBuilder.toString());
-        mailService.sendEmail(notifiedEmail);
+        gmailService.sendRegisterConfirmationEmail(user, tokenValue);
 
     }
+
 
     private String generateVerification(User user) {
         String tokenValue = UUID.randomUUID().toString();

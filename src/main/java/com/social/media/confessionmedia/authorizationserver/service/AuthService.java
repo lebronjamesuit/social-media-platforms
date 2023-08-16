@@ -67,6 +67,12 @@ public class AuthService {
 
     }
 
+    private void checkDuplicateUsernameOrEmail(User user) {
+        userRepo.findByUserNameOrEmail(user.getUserName(), user.getEmail())
+                 .ifPresent( u -> {throw new RuntimeException("A user with this username or email already exists");});
+
+    }
+
     private String generateVerification(User user) {
         String tokenValue = UUID.randomUUID().toString();
 
@@ -78,8 +84,7 @@ public class AuthService {
 
         return tokenValue;
     }
-
-
+    
     public void verificationRegisteredAccountByToken(String tokenValue) {
         Optional<VerificationToken> optionalVerificationToken = verificationTokenRepo.findByTokenValue(tokenValue);
         optionalVerificationToken.orElseThrow(() -> new SocialGeneralException("Invalid token"));

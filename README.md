@@ -2,7 +2,13 @@
 
 Go live at AWS Elastic Beanstalk
 
+Version 1
   http://jamesvo.eu-west-2.elasticbeanstalk.com/swagger-ui/index.html#/
+
+Version 2
+  http://confession.eu-west-2.elasticbeanstalk.com/swagger-ui/index.html#/
+
+  
 
 Amazon RDS 
 

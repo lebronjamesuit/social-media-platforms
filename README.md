@@ -53,7 +53,13 @@ Amazon RDS
 
 I use Angualar as Client-side web app, to call Apis.
 
-https://github.com/lebronjamesuit/social-media-angular14
+- Front-end: Angular 14 https://github.com/lebronjamesuit/social-media-angular14
+
+- Back-end: Spring 
+
+- Database Docker container mysql or Postgresql local
+
+
 
 
 

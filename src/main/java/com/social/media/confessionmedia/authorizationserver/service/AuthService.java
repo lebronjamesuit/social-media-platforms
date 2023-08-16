@@ -51,6 +51,8 @@ public class AuthService {
         user.setEnabled(false);  // UnActivated account
         user.setCreated(Instant.now());
 
+        checkDuplicateUsernameOrEmail(user);
+
         user.setPassword(passwordEncoder.encode(registerFormDTO.getPassword()));
         userRepo.save(user);
 
@@ -59,6 +61,11 @@ public class AuthService {
 
     }
 
+    private void checkDuplicateUsernameOrEmail(User user) {
+        userRepo.findByUserNameOrEmail(user.getUserName(), user.getEmail())
+                .ifPresent( u -> {throw new RuntimeException("A user with this username or email already exists");});
+
+    }
 
     private String generateVerification(User user) {
         String tokenValue = UUID.randomUUID().toString();

@@ -51,6 +51,15 @@ Amazon RDS
 
 ![refresh tokn](https://github.com/lebronjamesuit/social-media-platforms/assets/11584601/2f9cb3cf-6c25-41a6-8fbe-c5fb053d3f5a)
 
+Authorization
+1. So it starts with the Client sending a login request to the server.
+2. The server checks the credentials provided by the user, if the credentials are right, it creates a JSON Web Token (JWT).
+3. It responds with a success message (HTTP Status 200) and the JWT.
+4. The client uses this JWT in all the subsequent requests to the user, it provides this JWT as an Authorization header with Bearer authentication scheme.
+5. When the server, receives a request against a secured endpoint, it checks the JWT and validates whether the token is generated and signed by the server or not.
+6. If the validation is successful, the server responds accordingly to the client.
+
+
 I use Angualar as Client-side web app, to call Apis.
 
 - Front-end: Angular 14 https://github.com/lebronjamesuit/social-media-angular14

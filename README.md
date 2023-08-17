@@ -16,6 +16,10 @@ Amazon RDS
     PostgreSQL 15.3-R2  
 
 
+<img width="693" alt="image" src="https://github.com/lebronjamesuit/social-media-platforms/assets/11584601/8faaac07-563c-4228-90b5-a780659498e1">
+
+
+
 # Features
 
 - User registration and login with JWT authentication

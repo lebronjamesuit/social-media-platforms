@@ -14,3 +14,5 @@ http://localhost:8600/swagger-ui/index.html#/
 http://localhost:8600/actuator/health
 
 
+sudo lsof -i -P | grep LISTEN | grep :8600
+sudo kill -9 $process_id

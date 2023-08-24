@@ -9,6 +9,7 @@ import com.social.media.confessionmedia.authorizationserver.repository.Verificat
 import com.social.media.confessionmedia.authorizationserver.repository.UserRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -56,18 +57,7 @@ public class AuthService {
         userRepo.save(user);
 
         String tokenValue = generateVerification(user);
-
-        NotificationEmailDTO notifiedEmail = new NotificationEmailDTO();
-        notifiedEmail.setRecipient(user.getEmail());
-        notifiedEmail.setSubject("Confirmation registration");
-
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Welcome to our social media:  " + user.getUserName());
-        stringBuilder.append("One more step is click the link bellow to activate your account : ");
-        stringBuilder.append("http://localhost:8600/api/auth/accountVerification/" + tokenValue);
-
-        notifiedEmail.setBody(stringBuilder.toString());
-        mailService.sendEmail(notifiedEmail);
+        mailService.sendRegisterConfirmationEmail(user, tokenValue);
 
     }
 
@@ -158,5 +148,9 @@ public class AuthService {
                 .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getSubject()));
     }
 
+    public boolean isLoggedIn() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth.isAuthenticated() && !(auth  instanceof AnonymousAuthenticationToken);
+    }
 
 }

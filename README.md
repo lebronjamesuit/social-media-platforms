@@ -44,12 +44,16 @@ Amazon RDS
 
 
 
-
-# Token management
+# Spring Security + Oauth 2 Client combination flow chart.
 
 <img width="1138" alt="Screenshot 2023-07-09 at 20 42 26" src="https://github.com/lebronjamesuit/social-media-platforms/assets/11584601/633db9db-6940-4e60-8450-f56745fe4e6c">
 
+# Token management
 
+- Access tokens remain valid for a short period, usually less than 15 minutes, in order to maintain security. 
+- Refresh tokens, on the other hand, stay active for a longer duration, typically around one month.
+- The front-end application (angular web app) automatically initiates a request for a new access token as soon as the current one expires.
+  
 ![refresh tokn](https://github.com/lebronjamesuit/social-media-platforms/assets/11584601/2f9cb3cf-6c25-41a6-8fbe-c5fb053d3f5a)
 
 Authorization
@@ -59,6 +63,7 @@ Authorization
 4. The client uses this JWT in all the subsequent requests to the user, it provides this JWT as an Authorization header with Bearer authentication scheme.
 5. When the server, receives a request against a secured endpoint, it checks the JWT and validates whether the token is generated and signed by the server or not.
 6. If the validation is successful, the server responds accordingly to the client.
+
 
 
 I use Angualar as Client-side web app, to call Apis.

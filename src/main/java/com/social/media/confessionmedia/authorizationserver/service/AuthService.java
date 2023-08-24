@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -61,11 +62,6 @@ public class AuthService {
 
     }
 
-    private void checkDuplicateUsernameOrEmail(User user) {
-        userRepo.findByUserNameOrEmail(user.getUserName(), user.getEmail())
-                .ifPresent( u -> {throw new RuntimeException("A user with this username or email already exists");});
-
-    }
 
     private void checkDuplicateUsernameOrEmail(User user) {
         userRepo.findByUserNameOrEmail(user.getUserName(), user.getEmail())
@@ -153,6 +149,12 @@ public class AuthService {
         return   userRepo.findByUserName(principal.getSubject())
                 .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getSubject()));
     }
+
+    public boolean isLoggedIn() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth.isAuthenticated() && !(auth  instanceof AnonymousAuthenticationToken);
+    }
+
 
 
 }

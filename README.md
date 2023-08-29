@@ -1,23 +1,27 @@
 # Social-media-platforms
-
-Go live at AWS Elastic Beanstalk
-
-Version 1
-  http://jamesvo.eu-west-2.elasticbeanstalk.com/swagger-ui/index.html#/
-
-Version 2
-  http://confession.eu-west-2.elasticbeanstalk.com/swagger-ui/index.html#/
-
+This is a backend apis spring boot source code for confession social media system. 
+- Front-end: Angular 14 https://github.com/lebronjamesuit/social-media-angular14
   
+username/password:  user1 / user1password
+
+# Deployment: 
+- AWS Elastic Beanstalk has not provide HTTPS yet. So I set up AWS Load Balancer (app) to forward incomming request to EC2 Beanstalk for both 
+HTTPS 443 and HTTP 80.
+
+- Use self-signed certificate SSL/TLS decryption because I can't buy a domaini for back-end system.
+
+  https://lbconfessionapis-2012569758.eu-west-2.elb.amazonaws.com/swagger-ui/index.html
+
+
+- Front-end: Angular 14 https://github.com/lebronjamesuit/social-media-angular14
+
 
 Amazon RDS 
 
     Instance: db.t3.micro
     PostgreSQL 15.3-R2  
 
-
-<img width="693" alt="image" src="https://github.com/lebronjamesuit/social-media-platforms/assets/11584601/8faaac07-563c-4228-90b5-a780659498e1">
-
+<img width="685" alt="image" src="https://github.com/lebronjamesuit/social-media-platforms/assets/11584601/46fbd605-e3a4-4424-b806-40488608c642">
 
 
 # Features
@@ -66,13 +70,6 @@ Authorization
 
 
 
-I use Angualar as Client-side web app, to call Apis.
-
-- Front-end: Angular 14 https://github.com/lebronjamesuit/social-media-angular14
-
-- Back-end: Spring 
-
-- Database Docker container mysql or Postgresql local
 
 
 

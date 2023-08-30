@@ -1,19 +1,16 @@
 # Social-media-platforms
-This is a backend apis spring boot source code for confession social media system. 
+-  This is a backend apis spring boot source code for confession social media system.
+  
 - Front-end: Angular 14 https://github.com/lebronjamesuit/social-media-angular14
   
-username/password:  user1 / user1password
+- username/password:  user1 / user1password
 
 # Deployment: 
-- AWS Elastic Beanstalk has not provide HTTPS yet. So I set up AWS Load Balancer (app) to forward incomming request to EC2 Beanstalk for both 
-HTTPS 443 and HTTP 80.
+- AWS Elastic Beanstalk currently does not offer built-in HTTPS support. To address this, I've configured an AWS Load Balancer (Application Load Balancer) to seamlessly route incoming requests to the EC2 Beanstalk environment, handling both HTTPS traffic on port 443 and HTTP on port 80.
 
-- Use self-signed certificate SSL/TLS decryption because I can't buy a domaini for back-end system.
+- I decided for the backend system, I've implemented SSL/TLS decryption using a self-signed certificate.
 
   https://lbconfessionapis-2012569758.eu-west-2.elb.amazonaws.com/swagger-ui/index.html
-
-
-- Front-end: Angular 14 https://github.com/lebronjamesuit/social-media-angular14
 
 
 Amazon RDS 

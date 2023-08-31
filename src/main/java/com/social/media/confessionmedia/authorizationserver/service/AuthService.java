@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
@@ -42,6 +44,10 @@ public class AuthService {
     private JwtProvider jwtProvider;
     private AccessTokenService accessTokenService;
     private RefreshTokenService refreshTokenService;
+
+    private final String PATTERN_FORMAT = "dd/MM/YYYY hh:mm:ss";
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(PATTERN_FORMAT)
+            .withZone(ZoneId.systemDefault());
 
     @Transactional
     public void signUp(RegisterFormDTO registerFormDTO) {
@@ -103,24 +109,27 @@ public class AuthService {
         User userModel = (User) authenticationCore.getPrincipal();
         String accessToken = accessTokenService.generateNewAccessTokenByUserName(userModel.getUserName());
         String refreshedToken = refreshTokenService.generateAndSaveRefreshToken(userModel.getUserName());
-
+        String accessTokenExpiration = formatter.format(Instant.now().plus(jwtProvider.getJwtExpirationInMinutes(), ChronoUnit.MINUTES));
+        String refreshedExpiration = formatter.format(Instant.now().plus(jwtProvider.getRefreshExpiration(), ChronoUnit.MINUTES));
         return AuthenticationResponseDTO.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshedToken)
                 .username(requestLoginDTO.getUsername())
-                .accessTokenExpiresAt(Instant.now().plus(jwtProvider.getJwtExpirationInMinutes(), ChronoUnit.MINUTES))
-                .refreshTokenExpiresAt(Instant.now().plus(jwtProvider.getRefreshExpiration(), ChronoUnit.MINUTES))
+                .accessTokenExpiresAt(accessTokenExpiration)
+                .refreshTokenExpiresAt(refreshedExpiration)
                 .build();
     }
 
     /// If access token is expired, call this method to request a new one
     public AuthenticationResponseDTO requestNewAccessToken(NewAccessTokenRequestDTO newAccessTokenRequestDTO) {
         String accessToken = accessTokenService.generateNewAccessTokenByRefreshToken(newAccessTokenRequestDTO);
+        String accessTokenExpiration = formatter.format(Instant.now().plus(jwtProvider.getJwtExpirationInMinutes(), ChronoUnit.MINUTES));
+
         return AuthenticationResponseDTO.builder()
                 .accessToken(accessToken)
                 .refreshToken(newAccessTokenRequestDTO.getRefreshToken())
                 .username(newAccessTokenRequestDTO.getUsername())
-                .accessTokenExpiresAt(Instant.now().plus(jwtProvider.getJwtExpirationInMinutes(), ChronoUnit.MINUTES))
+                .accessTokenExpiresAt(accessTokenExpiration)
                 .build();
 
     }

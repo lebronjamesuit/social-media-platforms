@@ -14,8 +14,8 @@ public class AuthenticationResponseDTO {
 
     private String accessToken;
     private String refreshToken;
-    private Instant accessTokenExpiresAt;
-    private Instant refreshTokenExpiresAt;
+    private String accessTokenExpiresAt;
+    private String refreshTokenExpiresAt;
     private String username;
 
 }

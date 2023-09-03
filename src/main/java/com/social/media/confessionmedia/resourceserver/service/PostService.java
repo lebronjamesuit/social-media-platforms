@@ -13,11 +13,15 @@ import com.social.media.confessionmedia.resourceserver.mapper.PostMapper;
 
 import com.social.media.confessionmedia.resourceserver.model.Post;
 import com.social.media.confessionmedia.resourceserver.model.Subreddit;
+import com.social.media.confessionmedia.resourceserver.repository.PostPagingRepository;
 import com.social.media.confessionmedia.resourceserver.repository.PostRepository;
 import com.social.media.confessionmedia.resourceserver.repository.SubredditRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +42,7 @@ import com.social.media.confessionmedia.resourceserver.exceptions.PostNotFoundEx
 public class PostService {
 
     private final PostRepository postRepository;
+    private final PostPagingRepository postPagingRepository;
     private final SubredditRepository subredditRepository;
     private final UserRepo userRepo;
     private final AuthService authService;
@@ -58,13 +63,27 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public List<PostResponse> getAllPosts() {
-        return postRepository.findAll()
+        return postRepository.findAllByOrderByPostIdDesc()
                 .stream()
                 .map(postMapper::mapToDto)
                 .collect(toList());
     }
 
     @Transactional(readOnly = true)
+    public long getNumberOfPosts() {
+        return postRepository.count();
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostResponse> getPostPaging(PageRequest pr) {
+        Page<Post> posts = postPagingRepository.findAll(pr);
+        return posts.stream()
+                .map(postMapper::mapToDto)
+                .collect(toList());
+    }
+
+
+        @Transactional(readOnly = true)
     public List<PostResponse> getPostsBySubreddit(Long subredditId) {
         Subreddit subreddit = subredditRepository.findById(subredditId)
                 .orElseThrow(() -> new SubredditNotFoundException(subredditId.toString()));

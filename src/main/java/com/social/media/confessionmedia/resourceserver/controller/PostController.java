@@ -5,6 +5,8 @@ import com.social.media.confessionmedia.resourceserver.dto.PostRequest;
 import com.social.media.confessionmedia.resourceserver.dto.PostResponse;
 import com.social.media.confessionmedia.resourceserver.service.PostService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,4 +48,16 @@ public class PostController {
     public ResponseEntity<List<PostResponse>> getPostsByUsername(@RequestParam String username) {
         return status(HttpStatus.OK).body(postService.getPostsByUsername(username));
     }
+
+    @GetMapping("/page")
+    public ResponseEntity<List<PostResponse>> getAllPostsByPage(@RequestParam int page, @RequestParam int size, @RequestParam String sort) {
+        PageRequest pr = PageRequest.of(page-1,size, Sort.by(sort));
+        return status(HttpStatus.OK).body(postService.getPostPaging(pr));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> getAllPostsByPage() {
+        return status(HttpStatus.OK).body(postService.getNumberOfPosts());
+    }
+
 }

@@ -25,18 +25,18 @@ public class CommentController {
         return new ResponseEntity<>(CREATED);
     }
 
-    // api/v1/comments?postId=1
-    @GetMapping(params = "postId")
-    public ResponseEntity<List<CommentsDto>> getAllCommentsForPost(@RequestParam Long postId) {
+    // api/v1/comments/postId/{postId}
+    @GetMapping( "/postId/{postId}")
+    public ResponseEntity<List<CommentsDto>> getAllCommentsForPost(@PathVariable Long postId) {
         return ResponseEntity.status(OK)
                 .body(commentService.getAllCommentsForPost(postId));
     }
 
-    // api/v1/comments?userName=user1
-    @GetMapping(params = "userName")
-    public ResponseEntity<List<CommentsDto>> getAllCommentsForUser(@RequestParam String userName){
+    // api/v1/comments/{username}
+    @GetMapping("/username/{username}")
+    public ResponseEntity<List<CommentsDto>> getAllCommentsForUser(@PathVariable String username){
         return ResponseEntity.status(OK)
-                .body(commentService.getAllCommentsForUser(userName));
+                .body(commentService.getAllCommentsForUser(username));
     }
 
 }

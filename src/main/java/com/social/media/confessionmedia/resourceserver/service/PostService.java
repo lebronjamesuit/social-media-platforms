@@ -58,7 +58,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public List<PostResponse> getAllPosts() {
-        return postRepository.findAll()
+        return postRepository.findAllByOrderByPostIdDesc()
                 .stream()
                 .map(postMapper::mapToDto)
                 .collect(toList());

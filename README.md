@@ -50,6 +50,11 @@ Amazon RDS
 <img width="1138" alt="Screenshot 2023-07-09 at 20 42 26" src="https://github.com/lebronjamesuit/social-media-platforms/assets/11584601/633db9db-6940-4e60-8450-f56745fe4e6c">
 
 # Token management
+- JSON Web Tokens format in this project
+          
+<img width="739" alt="image" src="https://github.com/lebronjamesuit/social-media-platforms/assets/11584601/26ff0fc2-8e6f-4cb0-9e67-ae866404901c">
+
+
 
 - Access tokens remain valid for a short period, usually less than 15 minutes, in order to maintain security. 
 - Refresh tokens, on the other hand, stay active for a longer duration, typically around one month.

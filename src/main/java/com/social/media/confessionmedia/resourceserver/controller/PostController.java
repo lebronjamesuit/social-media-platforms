@@ -1,6 +1,6 @@
 package com.social.media.confessionmedia.resourceserver.controller;
 
-
+import com.social.media.confessionmedia.resourceserver.caches.CachePostManager;
 import com.social.media.confessionmedia.resourceserver.dto.PostRequest;
 import com.social.media.confessionmedia.resourceserver.dto.PostResponse;
 import com.social.media.confessionmedia.resourceserver.service.PostService;
@@ -35,9 +35,13 @@ public class PostController {
 
     @GetMapping
     public ResponseEntity<List<PostResponse>> getAllPosts() {
-        return status(HttpStatus.OK).body(postService.getAllPosts());
+        List<PostResponse> postResponseList =  CachePostManager.getPostFromCached();
+        if(postResponseList == null){
+            postResponseList =  postService.getAllPosts();
+            CachePostManager.putDataToCache(postResponseList);
+        }
+        return status(HttpStatus.OK).body(postResponseList);
     }
-
 
     @GetMapping(params = "subredditId")
     public ResponseEntity<List<PostResponse>> getPostsBySubreddit(@RequestParam Long subredditId) {
@@ -59,5 +63,4 @@ public class PostController {
     public ResponseEntity<Long> getAllPostsByPage() {
         return status(HttpStatus.OK).body(postService.getNumberOfPosts());
     }
-
 }

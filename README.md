@@ -22,7 +22,7 @@ Amazon RDS
 
 
 # Features
-
+- LRU (Least Recently Used) cache implementation on access O(1), modify O(n)
 - User registration and login with JWT authentication
 - Asymmetric keysRSA 2048, private key and public key
 - Password encryption using BCrypt

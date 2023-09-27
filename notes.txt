@@ -1,0 +1,18 @@
+
+# Mysql
+docker run --detach --env MYSQL_ROOT_PASSWORD=root --env MYSQL_USER=user --env MYSQL_PASSWORD=password --env MYSQL_DATABASE=social-media-db --name container-mysql-8 --publish 3306:3306 mysql:8-oracle
+
+
+CONTAINER ID   IMAGE            COMMAND                  CREATED      STATUS         PORTS                               NAMES
+2102c8a88b11   mysql:8-oracle   "docker-entrypoint.s…"   3 days ago   Up 4 seconds   0.0.0.0:3306->3306/tcp, 33060/tcp   container-mysql-8
+
+Restart
+docker container start 2102c8a88b11
+
+
+http://localhost:8600/swagger-ui/index.html#/
+http://localhost:8600/actuator/health
+
+
+sudo lsof -i -P | grep LISTEN | grep :8600
+sudo kill -9 $process_id
